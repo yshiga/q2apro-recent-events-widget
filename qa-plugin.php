@@ -149,13 +149,13 @@ function getAllForumEvents($queryRecentEvents, $eventsToShow, $region) {
 				// display date as 'before x time'
 				$diff = time() - strtotime($row['datetime']);
 				if($diff<60){
-					$evTime = $diff . 's ';
+					$evTime = $diff . qa_lang_html('qa_recent_events_widget_lang/sec');
 				}else if($diff < 60*60){
-					$evTime = (int)($diff/60)  . 'm ';
+					$evTime = (int)($diff/60)  .  qa_lang_html('qa_recent_events_widget_lang/min');
 				}else if($diff < 60*60*24){
-					$evTime = (int)($diff/(60*60))  . 'h ';
+					$evTime = (int)($diff/(60*60))  .  qa_lang_html('qa_recent_events_widget_lang/hour');
 				}else{
-					$evTime = (int)($diff/(60*60*24))  . 'd ';
+					$evTime = (int)($diff/(60*60*24))  .  qa_lang_html('qa_recent_events_widget_lang/day');
 				}
 				$evTime .= qa_lang_html('qa_recent_events_widget_lang/ago');
 			}
@@ -169,10 +169,12 @@ function getAllForumEvents($queryRecentEvents, $eventsToShow, $region) {
 			$qTitleShort = mb_substr($qTitle,0,22,'utf-8'); // shorten question title to 22 chars
 			$qTitleShort2 = (strlen($qTitle)>80) ? htmlspecialchars(mb_substr($qTitle,0,80,'utf-8')) .'&hellip;' : htmlspecialchars($qTitle); // shorten question title			
 			if ($region=='side') {
-				$listAllEvents .= '<a class="tipsify" href="'.$linkToPost.'" title="'.$eventName.' '.qa_lang_html('qa_recent_events_widget_lang/new_by').' '.$username.': '.htmlspecialchars($qTitle).'">'.$evTime.' '.$eventNameShort.': '.htmlspecialchars($qTitleShort).'&hellip;</a>';
+				$listAllEvents .= '<a class="tipsify" href="'.$linkToPost.'" title="'.$eventName.' '.qa_lang_html('qa_recent_events_widget_lang/new_by').' '.$username.': '.htmlspecialchars($qTitle).'">';
+				$listAllEvents .= $evTime.' '.$eventNameShort. qa_lang_html('qa_recent_events_widget_lang/new_by') . $username .':'  .htmlspecialchars($qTitleShort).'&hellip;</a>';
 			}
 			else {
-				$listAllEvents .= '<a href="'.$linkToPost.'">'.$evTime.' '.$eventName.' '.qa_lang_html('qa_recent_events_widget_lang/new_by').' '.$username.': '.$qTitleShort2.'</a>';
+				$listAllEvents .= '<a href="'.$linkToPost.'">';
+				$listAllEvents .= $evTime.' '.$eventName.' '.qa_lang_html('qa_recent_events_widget_lang/new_by').' '.$username.': '.$qTitleShort2.'</a>';
 			}
 			$countEvents++;
 			if($countEvents>=$maxEventsToShow) {

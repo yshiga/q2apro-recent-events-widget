@@ -21,6 +21,10 @@
 		'new_user_abbr' => 'R',
 		'new_user' => 'New User',
 		'ago' => 'ago', 
+		'day' => 'day', 
+		'hour' => 'hour', 
+		'min' => 'min', 
+		'sec' => 'sec', 
 
 		// for setting
 		'admin_count' => 'count', 

@@ -21,6 +21,10 @@
 		'new_user_abbr' => 'ユーザー登録',
 		'new_user' => '新しいユーザー',
 		'ago' => '前', 
+		'day' => '日', 
+		'hour' => '時', 
+		'min' => '分', 
+		'sec' => '病', 
 
 		// for setting
 		'admin_count' => 'count', 
