@@ -15,22 +15,22 @@
 		'new_comment_abbr' => 'コメント',
 		'new_bestanswer' => 'ベストアンサー',
 		'new_bestanswer_abbr' => 'ベストアンサー',
-		'new_by' => 'by', // new x BY member x
+		'new_by' => 'by ', // new x BY member x
 		'anonymous' => '匿名ユーザー', // new x BY member x
 		'hour_indic' => '', // will appear behind time, e.g. 06:45h
 		'new_user_abbr' => 'ユーザー登録',
 		'new_user' => '新しいユーザー',
-		'ago' => '前', 
-		'day' => '日', 
-		'hour' => '時', 
-		'min' => '分', 
-		'sec' => '病', 
+		'ago' => '前',
+		'day' => '日',
+		'hour' => '時間',
+		'min' => '分',
+		'sec' => '秒',
 
 		// for setting
-		'admin_count' => 'count', 
-		'admin_time_format' => 'time format', 
+		'admin_count' => 'count',
+		'admin_time_format' => 'time format',
 	);
-	
+
 
 /*
 	Omit PHP closing tag to help avoid accidental output
