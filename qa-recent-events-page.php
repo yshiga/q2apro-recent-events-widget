@@ -38,8 +38,7 @@
 		{
 			$qa_content=qa_content_prepare();
 
-			$qa_content['title']=qa_lang_html('example_page/page_title');
-			$qa_content['error']='An example error';
+			$qa_content['title']=qa_lang_html('qa_recent_events_widget_lang/page_title');
 			$qa_content['custom']='Some <b>custom html</b>';
 
 			$qa_content['form']=array(
