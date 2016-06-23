@@ -23,7 +23,7 @@
 	GNU General Public License for more details.
 
 	More about this license: http://www.gnu.org/licenses/gpl.html
-	
+
 */
 
 if ( !defined('QA_VERSION') )
@@ -41,7 +41,8 @@ qa_register_plugin_phrases('qa-recent-events-widget-lang-*.php', 'qa_recent_even
 // setting
 qa_register_plugin_module('module', 'q2apro-recent-events-admin.php', 'q2apro_recent_events', 'q2apro Recent Event');
 
-
+// page
+qa_register_plugin_module('page', 'qa-recent-events-page.php', 'qa_recent_events_page', 'Recent Events Page');
 
 // custom function to get all events and new events
 function getAllForumEvents($queryRecentEvents, $eventsToShow, $region) {
@@ -52,18 +53,18 @@ function getAllForumEvents($queryRecentEvents, $eventsToShow, $region) {
 
 	while ( ($row = qa_db_read_one_assoc($queryRecentEvents,true)) !== null ) {
 		if(in_array($row['event'], $eventsToShow)) {
-		
+
 			// question title
 			$qTitle = '';
-			
+
 			// workaround: convert tab jumps to & to be able to use query function
 			$toURL = str_replace("\t","&",$row['params']);
 			// echo $toURL."<br />"; // we get e.g. parentid=4523&parent=array(65)&postid=4524&answer=array(40)
 			parse_str($toURL, $data);  // parse URL to associative array $data
 			// now we can access the following variables in array $data if they exist in toURL
-			
+
 			$linkToPost = "-";
-			
+
 			// find out type, if Q set link directly, if A or C do query to get correct link
 			$postid = (isset($data['postid'])) ? $data['postid'] : null;
 			if($postid !== null) {
@@ -110,10 +111,10 @@ function getAllForumEvents($queryRecentEvents, $eventsToShow, $region) {
 					$linkToPost = $activity_url;
 				}
 			}
-			
+
 			$username = (is_null($row['handle'])) ? qa_lang_html('qa_recent_events_widget_lang/anonymous') : htmlspecialchars($row['handle']);
 			$usernameLink = (is_null($row['handle'])) ? qa_lang_html('qa_recent_events_widget_lang/anonymous') : '<a target="_blank" class="qa-user-link" style="font-weight:normal;" href="'.qa_opt('site_url').'user/'.$row['handle'].'">'.htmlspecialchars($row['handle']).'</a>';
-			
+
 			// set event name and css class
 			$eventName = '';
 			$eventNameShort = '';
@@ -159,15 +160,15 @@ function getAllForumEvents($queryRecentEvents, $eventsToShow, $region) {
 				}
 				$evTime .= qa_lang_html('qa_recent_events_widget_lang/ago');
 			}
-			
+
 			// if question title is empty, question got possibly deleted, do not show frontend!
 			if($qTitle=='') {
 				continue;
 			}
-			
+
 			// widget output, e.g. <a href="#" title="Antwort von echteinfachtv">17:23h A: Terme lösen und auskl...</a>
 			$qTitleShort = mb_substr($qTitle,0,22,'utf-8'); // shorten question title to 22 chars
-			$qTitleShort2 = (strlen($qTitle)>80) ? htmlspecialchars(mb_substr($qTitle,0,80,'utf-8')) .'&hellip;' : htmlspecialchars($qTitle); // shorten question title			
+			$qTitleShort2 = (strlen($qTitle)>80) ? htmlspecialchars(mb_substr($qTitle,0,80,'utf-8')) .'&hellip;' : htmlspecialchars($qTitle); // shorten question title
 			if ($region=='side') {
 				$listAllEvents .= '<a class="tipsify" href="'.$linkToPost.'" title="'.$eventName.' '.qa_lang_html('qa_recent_events_widget_lang/new_by').' '.$username.': '.htmlspecialchars($qTitle).'">';
 				$listAllEvents .= $evTime.' '.$eventNameShort. qa_lang_html('qa_recent_events_widget_lang/new_by') . $username .':'  .htmlspecialchars($qTitleShort).'&hellip;</a>';
@@ -185,8 +186,8 @@ function getAllForumEvents($queryRecentEvents, $eventsToShow, $region) {
 
 	return $listAllEvents;
 } // end function getAllForumEvents()
-		
-		
+
+
 /*
 	Omit PHP closing tag to help avoid accidental output
 */
