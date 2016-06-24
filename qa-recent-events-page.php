@@ -4,8 +4,6 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 	exit;
 }
 
-require_once QA_INCLUDE_DIR.'qa-db-selects.php';
-
 class qa_recent_events_page {
 
 	var $directory;
@@ -24,7 +22,7 @@ class qa_recent_events_page {
 		return array(
 			array(
 				'title' => 'Recent Events',
-				'request' => 'recent-events-page',
+				'request' => 'recent-events',
 				'nav' => 'M', // 'M'=main, 'F'=footer, 'B'=before main, 'O'=opposite main, null=none
 			),
 		);
@@ -33,7 +31,7 @@ class qa_recent_events_page {
 
 	function match_request($request)
 	{
-		if ($request=='recent-events-page')
+		if ($request=='recent-events')
 			return true;
 
 		return false;
@@ -45,7 +43,7 @@ class qa_recent_events_page {
 		// 各条件を設定
 		$per_page = 50;		// ページあたりの表示件数
 		$create_day = date("Y-m-d H:i:s", strtotime('-30 day'));	// 何日分か
-		$params = array('q_post', 'a_post', 'c_post', 'a_select', $create_day);	// 取得対象イベント
+		$params = array('q_post', 'a_post', 'c_post', 'a_select', $create_day);	// 対象イベント
 
 		$start = qa_get_start();
 		$total = $this->events_total($params);
