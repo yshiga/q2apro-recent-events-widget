@@ -137,7 +137,7 @@ function getAllForumEvents($queryRecentEvents, $eventsToShow, $region) {
 			else if($row['event']=="u_register") {
 				$eventName = qa_lang_html('qa_recent_events_widget_lang/new_user');
 				$eventNameShort = qa_lang_html('qa_recent_events_widget_lang/new_user_abbr');
-				$linkToPost = $_SERVER['host']."index.php/user/$username";
+				$linkToPost = "/user/$username";
 				$qTitle = $username." registered.";
 			}
 
