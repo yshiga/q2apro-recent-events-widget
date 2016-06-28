@@ -1,58 +1,105 @@
 <?php
-
-/*
-	Plugin Name: Recent Events Widget
-	Plugin URI: https://github.com/echteinfachtv/q2a-recent-events-widget
-	Plugin Description: Displays the newest events of your q2a forum in a widget
-	Plugin Version: 0.4
-	Plugin Date: 2015-04-21
-	Plugin Author: q2apro.com
-	Plugin Author URI: http://www.q2apro.com/
-	Plugin License: GPLv3
-	Plugin Minimum Question2Answer Version: 1.5
-	Plugin Update Check URI: https://raw.github.com/echteinfachtv/q2a-recent-events-widget/master/qa-plugin.php
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	More about this license: http://www.gnu.org/licenses/gpl.html
-
-*/
-
-if ( !defined('QA_VERSION') )
-{
+if (!defined('QA_VERSION')) { // don't allow this page to be requested directly from browser
 	header('Location: ../../');
 	exit;
 }
 
-// widget
-qa_register_plugin_module('widget', 'qa-recent-events-widget.php', 'qa_recent_events_widget', 'Recent Events Widget');
+class qa_recent_events_page {
 
-// language file
-qa_register_plugin_phrases('qa-recent-events-widget-lang-*.php', 'qa_recent_events_widget_lang');
+	var $directory;
+	var $urltoroot;
 
-// setting
-qa_register_plugin_module('module', 'q2apro-recent-events-admin.php', 'q2apro_recent_events', 'q2apro Recent Event');
 
-// page
-qa_register_plugin_module('page', 'qa-recent-events-page.php', 'qa_recent_events_page', 'Recent Events Page');
+	function load_module($directory, $urltoroot)
+	{
+		$this->directory=$directory;
+		$this->urltoroot=$urltoroot;
+	}
 
-// custom function to get all events and new events
-function getAllForumEvents($queryRecentEvents, $eventsToShow, $region) {
 
-	$maxEventsToShow = (int)(qa_opt('q2apro_recent_events_counts'));
-	$listAllEvents = '';
-	$countEvents = 0;
+	function suggest_requests() // for display in admin interface
+	{
+		return array(
+			array(
+				'title' => 'Recent Events',
+				'request' => 'recent-events',
+				'nav' => 'M', // 'M'=main, 'F'=footer, 'B'=before main, 'O'=opposite main, null=none
+			),
+		);
+	}
 
-	while ( ($row = qa_db_read_one_assoc($queryRecentEvents,true)) !== null ) {
-		if(in_array($row['event'], $eventsToShow)) {
+
+	function match_request($request)
+	{
+		if ($request=='recent-events')
+			return true;
+
+		return false;
+	}
+
+
+	function process_request($request)
+	{
+		// 各条件を設定
+		$per_page = 50;		// ページあたりの表示件数
+		$create_day = date("Y-m-d H:i:s", strtotime('-30 day'));	// 何日分か
+		$params = array('q_post', 'a_post', 'c_post', 'a_select', $create_day);	// 対象イベント
+
+		$start = qa_get_start();
+		$total = $this->events_total($params);
+		$qa_content=qa_content_prepare();
+
+		$qa_content['title'] = qa_lang_html('qa_recent_events_widget_lang/page_title');
+		$count = $per_page * ($start + 1);
+		if ($count <= $total) {
+			$count_str = $start + 1 . ' ～ ' . $count . '件 ( ' . $total . '件中 )';
+		} else {
+			$count_str = $start + 1 . ' ～ ' . $total . '件 ( ' . $total . '件中 )';
+		}
+		$qa_content['custom'] = '<div style="text-align:right;"><span style="color:gray">'.$count_str.'</span></div>';
+		$qa_content['custom'] .= $this->get_recent_events($start, $per_page, $params);
+
+		// $qa_content['custom_2']='<p><br>More <i>custom html</i></p>';
+		$qa_content['page_links']=qa_html_page_links(qa_request(), $start, $per_page, $total, qa_opt('pages_prev_next'));
+
+		$qa_content['custom_2'] = '<DIV style="clear:both;"></DIV>';
+		return $qa_content;
+	}
+
+	function get_recent_events($start = 0, $count = 50, $params)
+	{
+		array_push($params, $start);
+		array_push($params, $count);
+		$sql = "SELECT datetime,ipaddress,handle,event,params
+				 FROM `^eventlog`
+				 WHERE (`event` = $
+				 OR `event` = $
+				 OR `event` = $
+				 OR `event` = $)
+				 AND `datetime` >= $
+				 ORDER BY datetime DESC
+				 LIMIT #, #";
+
+		$queryRecentEvents = qa_db_query_sub(qa_db_apply_sub($sql, $params));
+		$eventsToShow = array_slice($params, 0, 4);
+		return $this->get_events_html($queryRecentEvents, $eventsToShow);
+	}
+
+	function get_events_html($queryRecentEvents, $eventsToShow)
+	{
+		$html = '';
+		$events = qa_db_read_all_assoc($queryRecentEvents);
+
+		if (count($events) <= 0) {
+			return $html;
+		}
+
+		$html = '<div class="recent-events-container">';
+		$html .= '<ul>';
+		foreach ($events as $row) {
+			if (!in_array($row['event'], $eventsToShow)) {
+				continue;
+			}
 
 			// question title
 			$qTitle = '';
@@ -137,7 +184,7 @@ function getAllForumEvents($queryRecentEvents, $eventsToShow, $region) {
 			else if($row['event']=="u_register") {
 				$eventName = qa_lang_html('qa_recent_events_widget_lang/new_user');
 				$eventNameShort = qa_lang_html('qa_recent_events_widget_lang/new_user_abbr');
-				$linkToPost = "/user/$username";
+				$linkToPost = $_SERVER['host']."index.php/user/$username";
 				$qTitle = $username." registered.";
 			}
 
@@ -169,24 +216,37 @@ function getAllForumEvents($queryRecentEvents, $eventsToShow, $region) {
 			// widget output, e.g. <a href="#" title="Antwort von echteinfachtv">17:23h A: Terme lösen und auskl...</a>
 			$qTitleShort = mb_substr($qTitle,0,22,'utf-8'); // shorten question title to 22 chars
 			$qTitleShort2 = (strlen($qTitle)>80) ? htmlspecialchars(mb_substr($qTitle,0,80,'utf-8')) .'&hellip;' : htmlspecialchars($qTitle); // shorten question title
-			if ($region=='side') {
-				$listAllEvents .= '<a class="tipsify" href="'.$linkToPost.'" title="'.$eventName.' '.qa_lang_html('qa_recent_events_widget_lang/new_by').' '.$username.': '.htmlspecialchars($qTitle).'">';
-				$listAllEvents .= $evTime.' '.$eventNameShort. qa_lang_html('qa_recent_events_widget_lang/new_by') . $username .':'  .htmlspecialchars($qTitleShort).'&hellip;</a>';
-			}
-			else {
-				$listAllEvents .= '<a href="'.$linkToPost.'">';
-				$listAllEvents .= $evTime.' '.$eventName.' '.qa_lang_html('qa_recent_events_widget_lang/new_by').' '.$username.': '.$qTitleShort2.'</a>';
-			}
-			$countEvents++;
-			if($countEvents>=$maxEventsToShow) {
-				break;
-			}
+
+			$html .= '<li>';
+			$html .= '<div class="event-item-title">';
+			$html .= '<h3 style="margin: 10px 0 0 0;"><a href="'.$linkToPost.'">' . $qTitleShort2.'</a></h3>';
+			$html .= '</div>';
+			$html .= '<span class="event-item-meta">';
+			$html .= $evTime.' '.$eventName.' '.qa_lang_html('qa_recent_events_widget_lang/new_by').' '.$username;
+			$html .= '</span>';
+			$html .= '</li>';
+
 		}
+		$html .= '</ul>';
+		$html .= '</div>';
+		return $html;
 	}
 
-	return $listAllEvents;
-} // end function getAllForumEvents()
+	function events_total($params)
+	{
+		// Get notifications total count for this user
+		$sql  = "SELECT count(*)
+				 FROM `^eventlog`
+				 WHERE (`event` = $
+				 OR `event` = $
+				 OR `event` = $
+				 OR `event` = $)
+				 AND `datetime` >= $";
 
+		return qa_db_read_one_value(qa_db_query_sub(qa_db_apply_sub($sql, $params)));
+	}
+
+}
 
 /*
 	Omit PHP closing tag to help avoid accidental output

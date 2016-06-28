@@ -20,17 +20,20 @@
 		'hour_indic' => 'h', // will appear behind time, e.g. 06:45h
 		'new_user_abbr' => 'R',
 		'new_user' => 'New User',
-		'ago' => 'ago', 
-		'day' => 'day', 
-		'hour' => 'hour', 
-		'min' => 'min', 
-		'sec' => 'sec', 
+		'ago' => 'ago',
+		'day' => 'day',
+		'hour' => 'hour',
+		'min' => 'min',
+		'sec' => 'sec',
 
 		// for setting
-		'admin_count' => 'count', 
-		'admin_time_format' => 'time format', 
+		'admin_count' => 'count',
+		'admin_time_format' => 'time format',
+
+		// for page
+		'page_title' => 'Recent Events',
 	);
-	
+
 
 /*
 	Omit PHP closing tag to help avoid accidental output

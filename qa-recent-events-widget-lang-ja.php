@@ -29,6 +29,9 @@
 		// for setting
 		'admin_count' => 'count',
 		'admin_time_format' => 'time format',
+
+		// for page
+		'page_title' => '最近の投稿',
 	);
 
 
