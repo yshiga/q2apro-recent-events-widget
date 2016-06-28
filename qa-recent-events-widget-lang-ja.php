@@ -25,6 +25,7 @@
 		'hour' => '時間',
 		'min' => '分',
 		'sec' => '秒',
+		'read_more' => 'もっと読む',
 
 		// for setting
 		'admin_count' => 'count',

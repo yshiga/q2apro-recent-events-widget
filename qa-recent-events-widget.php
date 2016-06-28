@@ -60,7 +60,9 @@ class qa_recent_events_widget {
 		// add fancy tooltip if widget is in sidebar
 		if($region=='side') {
 			$themeobject->output('<div class="liveboxEvents-sidebar">' . $recentEvents . '</div>
-				</div> <!-- end livebox sidebar -->');
+				</div> ');
+			$themeobject->output('<div>' . '<a href="/recent-events">' . qa_lang_html('qa_recent_events_widget_lang/read_more') . '</a>' . '</div><!-- end livebox sidebar -->');
+
 			$themeobject->output('<script type="text/javascript" src="https://raw.github.com/echteinfachtv/qa-recent-events-widget/master/tipsy.min.js"></script>');
 			$themeobject->output('<script type="text/javascript">
 				$(document).ready(function(){ 

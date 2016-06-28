@@ -25,6 +25,7 @@
 		'hour' => 'hour',
 		'min' => 'min',
 		'sec' => 'sec',
+		'read_more' => 'Read more',
 
 		// for setting
 		'admin_count' => 'count',
