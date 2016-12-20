@@ -13,6 +13,8 @@
 		'new_answer_abbr' => 'A',
 		'new_comment' => 'New Comment',
 		'new_comment_abbr' => 'C',
+		'new_blog' => 'New Blog',
+		'new_blog_comment' => 'New Blog Comment',
 		'new_bestanswer' => 'Best Answer',
 		'new_bestanswer_abbr' => 'B',
 		'new_by' => 'by', // new x BY member x

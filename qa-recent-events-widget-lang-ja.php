@@ -7,12 +7,14 @@
 	return array(
 		'recent_events' => '最近の投稿',
 		'question' => '質問',
-		'new_question' => '新しい質問',
+		'new_question' => '質問',
 		'new_question_abbr' => '質問',
-		'new_answer' => '新しい回答',
+		'new_answer' => '回答',
 		'new_answer_abbr' => '回答',
-		'new_comment' => '新しいコメント',
+		'new_comment' => 'コメント',
 		'new_comment_abbr' => 'コメント',
+		'new_blog' => '飼育日誌',
+		'new_blog_comment' => '飼育日誌のコメント',
 		'new_bestanswer' => 'ベストアンサー',
 		'new_bestanswer_abbr' => 'ベストアンサー',
 		'new_by' => 'by ', // new x BY member x
